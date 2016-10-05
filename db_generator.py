@@ -37,13 +37,20 @@ if __name__ == "__main__":
     stuff = api.user_timeline(screen_name = user_name, count = 100,include_rts = True)
     for tweet in stuff:
         tweet_id = str(tweet.id)
-        in_reply_to_status_id = str(tweet.in_reply_to_status_id_str)
-        in_reply_to_user_id = str(tweet.in_reply_to_user_id_str)
+        #in_reply_to_status_id = str(tweet.in_reply_to_status_id)
+
+        tmp = str(tweet.in_reply_to_user_id)
+        if tmp:
+            in_reply_to_user_id = api.get_user(tmp).screen_name
         device = str(tweet.source)
+        if "Web" in device: 
+            device = "web"
+        if "Android" in device:
+            device = "android"
         contributors = str(tweet.contributors)
         hashtags = str(tweet.entities.get('hashtags'))
 
-        string = tweet_id + "," + in_reply_to_status_id + "," + in_reply_to_user_id + "," + device + "," + contributors + "," + hashtags
+        string = tweet_id + "," + in_reply_to_user_id + "," + device + "," + contributors + "," + hashtags
    
         print string
     write_DB()
