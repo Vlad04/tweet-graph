@@ -86,6 +86,32 @@ void printGraph(struct Graph* graph)
         printf("\n");
     }
 }
+
+// Reading file
+
+int read_file(){
+
+	FILE * fp;
+    char * line = NULL;
+    size_t len = 0;
+    ssize_t read;
+
+    fp = fopen("graph.dot", "r");
+    if (fp == NULL)
+        exit(EXIT_FAILURE);
+
+    while ((read = getline(&line, &len, fp)) != -1) {
+        //printf("Retrieved line of length %zu :\n", read);
+        printf("%s", line);
+    }
+
+    fclose(fp);
+    if (line)
+        free(line);
+    exit(EXIT_SUCCESS);
+    return 0;
+
+}
  
 // Driver program to test above functions
 int main()
@@ -103,7 +129,8 @@ int main()
  
     // print the adjacency list representation of the above graph
     printGraph(graph);
- 
+
+	read_file(); 
     return 0;
 }
 

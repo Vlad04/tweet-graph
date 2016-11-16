@@ -34,4 +34,4 @@ if __name__ == "__main__":
     except:
         pass
 
-        os.system("python graph_generator.py")
+    os.system("python graph_generator.py")
