@@ -1,8 +1,8 @@
 all:
-	g++ graph_generator.c -o graph_generator
+	gcc main.c -o main
 
 clean:
-	rm -rf graph_generator
 	rm -rf *.csv
 	rm -rf *.dot
 	rm -rf *.pdf
+	rm -rf main
