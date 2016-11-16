@@ -3,3 +3,6 @@ all:
 
 clean:
 	rm -rf graph_generator
+	rm -rf *.csv
+	rm -rf *.dot
+	rm -rf *.pdf
