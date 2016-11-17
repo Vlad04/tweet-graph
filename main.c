@@ -7,7 +7,10 @@
 #include <stdio.h>
 #include <stdlib.h>
 #include <string.h>
- 
+#include "hash.h"
+
+int count=0;
+
 // A structure to represent an adjacency list node
 struct AdjListNode
 {
@@ -88,6 +91,21 @@ void printGraph(struct Graph* graph)
     }
 }
 
+
+char  *removesenter(char* source) {
+  char* i = source;
+  char* j = source;
+  while(*j != 0)
+  {
+    *i = *j++;
+    if(*i != '\n')
+      i++;
+  }
+  *i = 0;
+
+	return source;
+}
+
 char  *removeschar(char* source) {
   char* i = source;
   char* j = source;
@@ -116,13 +134,46 @@ char  *removespaces(char* source) {
 	return source;
 }
 
+char* itoa(int val, int base){
+    
+    static char buf[32] = {0};
+    int i = 30;
+    for(; val && i ; --i, val /= base)
+        buf[i] = "0123456789abcdef"[val % base];
+        return &buf[i+1];                
+}
+
+
+int map_name(char *node){
+    
+    int key = 0;
+    static struct nlist *item; /* pointer table */
+    struct nlist *np;
+
+	item = lookup(node);
+
+   	if(item != NULL) {
+		//printf("Element found: %s\n", item->defn);
+        key = atoi(item->defn);
+   	} else {
+		//printf("Element not found\n");
+		//printf("Value %d\n", count) ;
+        install(node,itoa(count,10));
+        key = count;
+        count++;
+	}
+
+    return key;
+}
+
 // Reading file
-int read_file(struct Graph* graph){
+int read_file(){
 
 	FILE * fp;
     char * line = NULL;
     size_t len = 0;
     ssize_t read;
+    int node_key ,edge_key ,size= 0; 
 
 	const char s[2] = "->";
 	char *word = "->";
@@ -135,8 +186,6 @@ int read_file(struct Graph* graph){
 		return -1;
 
     while ((read = getline(&line, &len, fp)) != -1) {
-        //printf("Retrieved line of length %zu :\n", read);
-        //printf("%s", line);
 
 		if(strstr(line,word) != NULL) {
 
@@ -149,21 +198,35 @@ int read_file(struct Graph* graph){
 			while( token != NULL ) {
 				token = removespaces(token);
 				token = removeschar(token);
+				token = removesenter(token);
+
 
 				if (count == 0 ){
 					node = token;
-					printf( "node  =  %s ", node);
+                    node_key = map_name(node);
+                    //printf( "node  =  %s , key = %d \n",node,node_key);
 				}
 				
 				if (count == 1){
 					edge = token;
-					printf( "edge  =  %s ", edge);
+                    edge_key = map_name(edge);
+                    //printf( "node  =  %s , key = %d \n",edge,edge_key);
 					count = 0;
 				}
-			
+        
 				count ++;
 				token = strtok(NULL, s);
 			}
+
+            //printf ("addEdge(graph,%d,%d);\n",node_key,edge_key);
+            if (node_key > size ) {
+                size = node_key;
+            }
+
+            if (edge_key > size ) {
+                size = edge_key;
+            }
+
 		}
 
     }
@@ -172,26 +235,19 @@ int read_file(struct Graph* graph){
     if (line)
         free(line);
     
-	return 0;
+	return size;
 }
  
-// Driver program to test above functions
 int main()
 {
-    // create the graph given in above fugure
-    int V = 5;
-    struct Graph* graph = createGraph(V);
 
-	read_file(graph); 
-    
-	// print the adjacency list representation of the above graph
+	int size = read_file(); 
 
-    addEdge(graph, 0,1);
-    addEdge(graph, 0,2);
-    addEdge(graph, 0,3);
-    addEdge(graph, 0,4);
+    struct Graph* graph = createGraph(size);
+	
+	//printf ("addEdge(graph,%d,%d);\n",node_key,edge_key);
 
-    printGraph(graph);
+    //printGraph(graph);
 
     return 0;
 }
