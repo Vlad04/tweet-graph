@@ -241,13 +241,25 @@ int read_file(){
 int main()
 {
 
+	// get the number of nodes
+	// this should generate a 2 dimentional array with the numbers of ndoe 
+	// and edge 
+	// in example 
+	// [0][24]
+	// [0][12]
+	// [0][32]
+
 	int size = read_file(); 
 
+	// Create the graph with the proper size
     struct Graph* graph = createGraph(size);
 	
-	//printf ("addEdge(graph,%d,%d);\n",node_key,edge_key);
+	//addEdge(graph,[node],[edge]);
+	addEdge(graph,0,1);
+	addEdge(graph,1,2);
+	addEdge(graph,2,3);
 
-    //printGraph(graph);
+    printGraph(graph);
 
     return 0;
 }
