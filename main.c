@@ -6,6 +6,7 @@
  
 #include <stdio.h>
 #include <stdlib.h>
+#include <string.h>
  
 // A structure to represent an adjacency list node
 struct AdjListNode
@@ -87,30 +88,91 @@ void printGraph(struct Graph* graph)
     }
 }
 
-// Reading file
+char  *removeschar(char* source) {
+  char* i = source;
+  char* j = source;
+  while(*j != 0)
+  {
+    *i = *j++;
+    if(*i != ';')
+      i++;
+  }
+  *i = 0;
 
-int read_file(){
+	return source;
+}
+
+char  *removespaces(char* source) {
+  char* i = source;
+  char* j = source;
+  while(*j != 0)
+  {
+    *i = *j++;
+    if(*i != ' ')
+      i++;
+  }
+  *i = 0;
+
+	return source;
+}
+
+// Reading file
+int read_file(struct Graph* graph){
 
 	FILE * fp;
     char * line = NULL;
     size_t len = 0;
     ssize_t read;
 
+	const char s[2] = "->";
+	char *word = "->";
+	char *token;
+	char *node;
+	char *edge;
+
     fp = fopen("graph.dot", "r");
     if (fp == NULL)
-        exit(EXIT_FAILURE);
+		return -1;
 
     while ((read = getline(&line, &len, fp)) != -1) {
         //printf("Retrieved line of length %zu :\n", read);
-        printf("%s", line);
+        //printf("%s", line);
+
+		if(strstr(line,word) != NULL) {
+
+			/* get the first token */
+			token = strtok(line, s);
+
+			int count = 0;
+
+			/* walk through other tokens */
+			while( token != NULL ) {
+				token = removespaces(token);
+				token = removeschar(token);
+
+				if (count == 0 ){
+					node = token;
+					printf( "node  =  %s ", node);
+				}
+				
+				if (count == 1){
+					edge = token;
+					printf( "edge  =  %s ", edge);
+					count = 0;
+				}
+			
+				count ++;
+				token = strtok(NULL, s);
+			}
+		}
+
     }
 
     fclose(fp);
     if (line)
         free(line);
-    exit(EXIT_SUCCESS);
-    return 0;
-
+    
+	return 0;
 }
  
 // Driver program to test above functions
@@ -119,18 +181,18 @@ int main()
     // create the graph given in above fugure
     int V = 5;
     struct Graph* graph = createGraph(V);
-    addEdge(graph, 0, 1);
-    addEdge(graph, 0, 4);
-    addEdge(graph, 1, 2);
-    addEdge(graph, 1, 3);
-    addEdge(graph, 1, 4);
-    addEdge(graph, 2, 3);
-    addEdge(graph, 3, 4);
- 
-    // print the adjacency list representation of the above graph
+
+	read_file(graph); 
+    
+	// print the adjacency list representation of the above graph
+
+    addEdge(graph, 0,1);
+    addEdge(graph, 0,2);
+    addEdge(graph, 0,3);
+    addEdge(graph, 0,4);
+
     printGraph(graph);
 
-	read_file(); 
     return 0;
 }
 
