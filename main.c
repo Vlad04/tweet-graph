@@ -2,9 +2,13 @@
 #include "hash.h"
 #include "graph.h"
 #include "array.h"
+#include <ctype.h>
+#include <stdlib.h>
+#include <unistd.h>
 
 int count=0;
-
+FILE *fp;
+int verbose_flag = 0;
 Array nodes;
 Array edges;
 
@@ -32,7 +36,7 @@ char* itoa(int val, int base){
 
 int map_name(char *node){
     int key = 0;
-    static struct nlist *item; /* pointer table */
+    static struct nlist *item; /* hash table */
     struct nlist *np;
 
 	item = lookup(node);
@@ -62,9 +66,7 @@ int read_file(){
 
 	const char s[2] = "->";
 	char *word = "->";
-	char *token;
-	char *node;
-	char *edge;
+	char *token, *node, *edge;
 
     fp = fopen("graph.dot", "r");
     if (fp == NULL)
@@ -85,18 +87,21 @@ int read_file(){
 				token = clean(token,';');
 				token = clean(token,'\n');
 
-
 				if (count == 0 ){
 					node = token;
                     node_key = map_name(node);
-                    //printf( "node  =  %s , key = %d \n",node,node_key);
+					if (verbose_flag){
+                    	printf( "node  =  %s , key = %d \n",node,node_key);
+					}
 					insertarray(&nodes,node_key);
 				}
 				
 				if (count == 1){
 					edge = token;
                     edge_key = map_name(edge);
-                    //printf( "node  =  %s , key = %d \n",edge,edge_key);
+					if (verbose_flag){
+                    	printf("node  =  %s , key = %d \n",edge,edge_key);
+					}
 					insertarray(&edges,edge_key);
 					count = 0;
 				}
@@ -113,12 +118,48 @@ int read_file(){
 
     return 0;
 }
- 
-int main()
-{
+
+
+void print_help(){
+	printf("Help : \n");
+	printf("	-p : Print Graph network\n");
+	printf("	-s : Sort users with more` connections\n");
+	printf("	-v : Vervose in ourput.log\n");
+	printf(" \n");
+} 
+
+int main (int argc, char **argv) {
+
+	int sort_flag = 0;
+	int print_flag = 0;
+	int c;
 
     int size = 0;
     struct Graph* graph;
+
+	if (argc == 1 ){
+		print_help();
+	}
+
+	while ((c = getopt (argc, argv, "svph")) != -1)
+		switch (c) {
+			case 'v':
+				verbose_flag = 1;
+				fp = fopen("output.log", "w");
+				break;
+			case 'p':
+				print_flag = 1;
+				break;
+			case 's':
+				sort_flag = 1;
+				break;
+			case 'h':
+				print_help();
+				break;
+			default:
+				print_help();
+        		abort ();
+		}
 
 	initarray(&nodes,1);
 	initarray(&edges,1);
@@ -127,20 +168,26 @@ int main()
 
 	if (nodes.used == edges.used){
         size = edges.used;
-        printf("Size: %zu\n", edges.used);
-        // Create the graph with the proper size
         graph = createGraph(size);
     }	
 	
     for (int i = 0; i < size; i++){
-        //printf("addEdge(graph,%d,%d)\n",nodes.array[i],edges.array[i]);
+		if (verbose_flag){
+			fprintf(fp,"addEdge(graph,%d,%d)\n",nodes.array[i],edges.array[i]);
+		}
         addEdge(graph,nodes.array[i],edges.array[i]);
     }
-    
-    printGraph(graph);
+ 
+	if (print_flag){
+		printGraph(graph);
+	}
 
 	freearray(&nodes);
 	freearray(&edges);
+	
+	if (verbose_flag){
+		fclose(fp);
+	}
     return 0;
 }
 
