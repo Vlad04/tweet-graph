@@ -3,6 +3,7 @@ all:
 
 clean:
 	rm -rf main
+	rm -rf *.log
 
 distclean:
 	rm -rf *.csv
