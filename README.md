@@ -19,6 +19,8 @@ This project analyse the social netwok of a user by:
         Propouse a solution of conections to add in order to
         balance the three of user`
 
+    # Shortest path <user a> <user b>
+        Find the shortest path between 2 users ( if exist )
 
 INSTRUCTIONS
 
