@@ -1,8 +1,12 @@
 #include <stdio.h>
 #include "hash.h"
 #include "graph.h"
+#include "array.h"
 
 int count=0;
+
+Array nodes;
+Array edges;
 
 char  *clean(char* source,char key) {
   char* i = source;
@@ -18,7 +22,6 @@ char  *clean(char* source,char key) {
 	return source;
 }
 
-
 char* itoa(int val, int base){
     static char buf[32] = {0};
     int i = 30;
@@ -26,7 +29,6 @@ char* itoa(int val, int base){
         buf[i] = "0123456789abcdef"[val % base];
         return &buf[i+1];                
 }
-
 
 int map_name(char *node){
     int key = 0;
@@ -56,7 +58,7 @@ int read_file(){
     char * line = NULL;
     size_t len = 0;
     ssize_t read;
-    int node_key ,edge_key ,size= 0; 
+    int node_key ,edge_key = 0; 
 
 	const char s[2] = "->";
 	char *word = "->";
@@ -88,62 +90,57 @@ int read_file(){
 					node = token;
                     node_key = map_name(node);
                     //printf( "node  =  %s , key = %d \n",node,node_key);
+					insertarray(&nodes,node_key);
 				}
 				
 				if (count == 1){
 					edge = token;
                     edge_key = map_name(edge);
                     //printf( "node  =  %s , key = %d \n",edge,edge_key);
+					insertarray(&edges,edge_key);
 					count = 0;
 				}
         
 				count ++;
 				token = strtok(NULL, s);
 			}
-
-            //printf ("addEdge(graph,%d,%d);\n",node_key,edge_key);
-            if (node_key > size ) {
-                size = node_key;
-            }
-
-            if (edge_key > size ) {
-                size = edge_key;
-            }
-
 		}
-
     }
-
-    fclose(fp);
+    
+	fclose(fp);
     if (line)
         free(line);
-    
-	return size;
+
+    return 0;
 }
  
 int main()
 {
 
-	// get the number of nodes
-	// this should generate a 2 dimentional array with the numbers of ndoe 
-	// and edge 
-	// in example 
-	// [0][24]
-	// [0][12]
-	// [0][32]
+    int size = 0;
+    struct Graph* graph;
 
-	int size = read_file(); 
+	initarray(&nodes,1);
+	initarray(&edges,1);
 
-	// Create the graph with the proper size
-    struct Graph* graph = createGraph(size);
+	read_file(); 
+
+	if (nodes.used == edges.used){
+        size = edges.used;
+        printf("Size: %zu\n", edges.used);
+        // Create the graph with the proper size
+        graph = createGraph(size);
+    }	
 	
-	//addEdge(graph,[node],[edge]);
-	addEdge(graph,0,1);
-	addEdge(graph,1,2);
-	addEdge(graph,2,3);
-
+    for (int i = 0; i < size; i++){
+        //printf("addEdge(graph,%d,%d)\n",nodes.array[i],edges.array[i]);
+        addEdge(graph,nodes.array[i],edges.array[i]);
+    }
+    
     printGraph(graph);
 
+	freearray(&nodes);
+	freearray(&edges);
     return 0;
 }
 
