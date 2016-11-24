@@ -59,5 +59,12 @@ Then you can execute the main as :
 
     ./main -s : Sort the users by number of friends
 
+TODO:
+    * ) Improve graphical interface : 
+           python : https://networkx.github.io/
+    * ) Improve sorting algorithm
+    * ) Make shortest poing algorithm 
+    * ) Balance function ( detect if tree is balanced ) 
+
 
 
