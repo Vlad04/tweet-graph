@@ -23,3 +23,12 @@ void freearray(Array *a) {
   a->array = NULL;
   a->used = a->size = 0;
 }
+
+void printarray(Array a) {
+
+	printf("\n");
+	for ( int j = 0; j < a.used; j++){
+		printf(" %d ,",a.array[j]);
+	}
+	printf("\n");
+}

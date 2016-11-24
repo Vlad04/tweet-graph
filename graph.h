@@ -76,6 +76,7 @@ void addEdge(struct Graph* graph, int src, int dest)
 void printGraph(struct Graph* graph)
 {
     int v;
+
     for (v = 0; v < graph->V; ++v)
     {
         struct AdjListNode* pCrawl = graph->array[v].head;

@@ -128,6 +128,91 @@ void print_help(){
 	printf(" \n");
 } 
 
+
+Array buble_sort( Array array){
+
+	int swap, swap_tmp;
+	int size = array.used;
+	Array tmp;
+
+	initarray(&tmp,1);
+	for ( int j = 0; j < size; j++){
+		insertarray(&tmp,j);
+	}
+
+	if (verbose_flag){
+		printarray(array);
+		printarray(tmp);
+	}
+
+	for (int c = 0 ; c < ( size - 1 ); c++) {
+	    for (int d = 0 ; d < size - c - 1; d++) {
+			/* For decreasing order use < */
+			if (array.array[d] < array.array[d+1]) 
+			{
+				swap       = array.array[d];
+				array.array[d]   = array.array[d+1];
+				array.array[d+1] = swap;
+
+				// We have to do this in order to save the position //
+				swap_tmp       = tmp.array[d];
+				tmp.array[d]   = tmp.array[d+1];
+				tmp.array[d+1] = swap_tmp;
+			}
+		}
+	}
+	
+	if (verbose_flag){
+		printarray(array);
+		printarray(tmp);
+	}
+
+	return array;
+}
+
+void sort_graph( struct Graph* graph ){
+
+    int count =0;
+    Array nodes_tmp;
+
+    initarray(&nodes_tmp,1);
+
+    for (int v = 0; v < graph->V; ++v)
+    {
+        struct AdjListNode* pCrawl = graph->array[v].head;
+        while (pCrawl)
+        {
+
+		    if (verbose_flag){
+                printf("-> %d", pCrawl->dest);
+            }
+            pCrawl = pCrawl->next;
+            count++;
+        }
+
+		    if (verbose_flag){
+                printf(">> %d", count);
+                printf("\n");
+            }
+        insertarray(&nodes_tmp,count);
+
+        count = 0;
+    }
+
+
+	Array array_tmp_2;
+	
+	array_tmp_2 = buble_sort(nodes_tmp);
+	/*
+        for ( int j = 0; j < array_tmp_2.used; j++){
+            printf(">> %d\n",array_tmp_2.array[j]);
+			}
+	*/
+    freearray(&nodes_tmp);
+
+}
+
+
 int main (int argc, char **argv) {
 
 	int sort_flag = 0;
@@ -180,6 +265,10 @@ int main (int argc, char **argv) {
  
 	if (print_flag){
 		printGraph(graph);
+	}
+
+	if (sort_flag){
+        sort_graph(graph);
 	}
 
 	freearray(&nodes);
