@@ -129,55 +129,51 @@ void print_help(){
 } 
 
 
-Array buble_sort( Array array){
+void buble_sort( Array* array, Array* tmp){
 
 	int swap, swap_tmp;
-	int size = array.used;
-	Array tmp;
-
-	initarray(&tmp,1);
-	for ( int j = 0; j < size; j++){
-		insertarray(&tmp,j);
-	}
+	int size = array->used;
 
 	if (verbose_flag){
-		printarray(array);
-		printarray(tmp);
+		
+		printf ("\n buble_sort \n");
+		printarray(*array);
+		printarray(*tmp);
 	}
 
 	for (int c = 0 ; c < ( size - 1 ); c++) {
 	    for (int d = 0 ; d < size - c - 1; d++) {
 			/* For decreasing order use < */
-			if (array.array[d] < array.array[d+1]) 
+			if (array->array[d] < array->array[d+1]) 
 			{
-				swap       = array.array[d];
-				array.array[d]   = array.array[d+1];
-				array.array[d+1] = swap;
+				swap       = array->array[d];
+				array->array[d]   = array->array[d+1];
+				array->array[d+1] = swap;
 
 				// We have to do this in order to save the position //
-				swap_tmp       = tmp.array[d];
-				tmp.array[d]   = tmp.array[d+1];
-				tmp.array[d+1] = swap_tmp;
+				swap_tmp       = tmp->array[d];
+				tmp->array[d]   = tmp->array[d+1];
+				tmp->array[d+1] = swap_tmp;
 			}
 		}
 	}
 	
 	if (verbose_flag){
-		printarray(array);
-		printarray(tmp);
+		printarray(*array);
+		printarray(*tmp);
 	}
 
-	return array;
 }
 
 void sort_graph( struct Graph* graph ){
 
     int count =0;
+	int size = graph->V;
     Array nodes_tmp;
 
     initarray(&nodes_tmp,1);
 
-    for (int v = 0; v < graph->V; ++v)
+    for (int v = 0; v < size; ++v)
     {
         struct AdjListNode* pCrawl = graph->array[v].head;
         while (pCrawl)
@@ -199,16 +195,33 @@ void sort_graph( struct Graph* graph ){
         count = 0;
     }
 
+	Array nodes_pos;
+	initarray(&nodes_pos,1);
 
-	Array array_tmp_2;
+	for ( int j = 0; j < size; j++){
+		insertarray(&nodes_pos,j);
+	}
 	
-	array_tmp_2 = buble_sort(nodes_tmp);
-	/*
-        for ( int j = 0; j < array_tmp_2.used; j++){
-            printf(">> %d\n",array_tmp_2.array[j]);
-			}
-	*/
-    freearray(&nodes_tmp);
+	buble_sort(&nodes_tmp,&nodes_pos);
+
+	if( verbose_flag ){
+		printf ("\n sort_graph \n");
+		printarray(nodes_tmp);
+		printarray(nodes_pos);
+    }
+
+	
+	printf ("\n Most Valuable Users \n");
+
+	printf ("Do NOT lose these contacts in your network\n");
+
+	for ( int j = 0; j < size ; j ++ ){
+		printf (" User : %d has %d contacts \n",
+			 nodes_pos.array[j], nodes_tmp.array[j]);
+	} 
+
+	freearray(&nodes_tmp);
+	freearray(&nodes_pos);
 
 }
 
