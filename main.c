@@ -141,8 +141,10 @@ void buble_sort( Array* array, Array* tmp){
 		printarray(*tmp);
 	}
 
-	for (int c = 0 ; c < ( size - 1 ); c++) {
-	    for (int d = 0 ; d < size - c - 1; d++) {
+	int c = 0;
+	int d = 0;
+	for (c ; c < ( size - 1 ); c++) {
+	    for (d; d < size - c - 1; d++) {
 			/* For decreasing order use < */
 			if (array->array[d] < array->array[d+1]) 
 			{
@@ -165,6 +167,63 @@ void buble_sort( Array* array, Array* tmp){
 
 }
 
+void quickSort(Array* array, Array* tmp, int first, int last)
+{
+/*
+   int pivote;
+   pivote=(left+right)/2;
+   
+   int l = left;
+   int r = right;
+
+    do{
+        while(array[l]<pivote && l<right)l++;
+        while(pivote<array[r] && r > left)r--;
+        if(l <=r)
+        {
+            tmp= array[l];
+            array[l]=array[r];
+            array[r]=tmp;
+            l++;
+            r--;
+        }
+    }while(l<=r);
+    if(left<r){quickSort(array,left,r);}
+    if(right>l){quickSort(array,l,right);}
+*/
+int size = array->used;
+
+int pivot,j,temp,i;
+
+     if(first<last){
+         pivot=first;
+         i=first;
+         j=last;
+	
+         while(i<j){
+		//int* num_1=&array[i];
+		//int* num_2=&array[pivot];
+             while(array->array[i]<=array->array[pivot]&&i<last)
+                 i++;
+             while(array->array[j]>array->array[pivot])
+                 j--;
+             if(i<j){
+                 temp=array->array[i];
+                 array->array[i]=array->array[j];
+                array->array[j]=temp;
+             }
+         }
+
+         temp=array->array[pivot];
+         array->array[pivot]=array->array[j];
+         array->array[j]=temp;
+         //quickSort(array->array[],first,j-1);
+        // quickSort(array->array[],j+1,last);
+
+    }
+}
+
+
 void sort_graph( struct Graph* graph ){
 
     int count =0;
@@ -172,8 +231,8 @@ void sort_graph( struct Graph* graph ){
     Array nodes_tmp;
 
     initarray(&nodes_tmp,1);
-
-    for (int v = 0; v < size; ++v)
+    int v = 0;
+    for (v; v < size; ++v)
     {
         struct AdjListNode* pCrawl = graph->array[v].head;
         while (pCrawl)
@@ -197,12 +256,15 @@ void sort_graph( struct Graph* graph ){
 
 	Array nodes_pos;
 	initarray(&nodes_pos,1);
-
-	for ( int j = 0; j < size; j++){
-		insertarray(&nodes_pos,j);
+	
+	int k = 0;
+	for ( k; k < size; k++){
+		insertarray(&nodes_pos,k);
 	}
 	
-	buble_sort(&nodes_tmp,&nodes_pos);
+	//buble_sort(&nodes_tmp,&nodes_pos);
+	quickSort(&nodes_tmp,&nodes_pos,0,size-1);
+	//buble_sort(&nodes_pos, 0, size-1);
 
 	if( verbose_flag ){
 		printf ("\n sort_graph \n");
@@ -214,8 +276,9 @@ void sort_graph( struct Graph* graph ){
 	printf ("\n Most Valuable Users \n");
 
 	printf ("Do NOT lose these contacts in your network\n");
-
-	for ( int j = 0; j < size ; j ++ ){
+	
+	int j = 0;
+	for ( j; j < size ; j ++ ){
 		printf (" User : %d has %d contacts \n",
 			 nodes_pos.array[j], nodes_tmp.array[j]);
 	} 
@@ -231,6 +294,7 @@ int main (int argc, char **argv) {
 	int sort_flag = 0;
 	int print_flag = 0;
 	int c;
+	
 
     int size = 0;
     struct Graph* graph;
@@ -268,8 +332,9 @@ int main (int argc, char **argv) {
         size = edges.used;
         graph = createGraph(size);
     }	
-	
-    for (int i = 0; i < size; i++){
+    
+    int i = 0;
+    for (i; i < size; i++){
 		if (verbose_flag){
 			fprintf(fp,"addEdge(graph,%d,%d)\n",nodes.array[i],edges.array[i]);
 		}
@@ -292,4 +357,3 @@ int main (int argc, char **argv) {
 	}
     return 0;
 }
-
