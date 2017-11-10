@@ -59,5 +59,6 @@ Then you can execute the main as :
 
     ./main -s : Sort the users by number of friends
 
+csvtojson 20_Vlad.csv > converted.json
 
 
