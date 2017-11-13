@@ -62,3 +62,15 @@ Then you can execute the main as :
 csvtojson 20_Vlad.csv > converted.json
 
 
+
+
+{
+  "Vlad_04": {
+    "kimbuca": {
+      "_AlexHirsch": "June 23, 1912",
+      "full_name": "Alan Turing"
+    }
+  }
+}
+
+

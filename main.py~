@@ -3,8 +3,10 @@ import os
 import argparse
 import csv
 import json
+import os
+from subprocess import call
 
-  
+
 
 
 LIMIT = 3
@@ -40,11 +42,16 @@ if __name__ == "__main__":
         pass
 
     os.system("python graph_generator.py")
-    
-    jsonfile = open('database.json', 'w')
+    #call(["csvtojson filename > converted.json"])
+
+    jsonfile = open('database.json', 'a')
+
 
     reader = csv.DictReader( filename)
-    for row in reader:
-        json.dump(user_friends, jsonfile)
-        jsonfile.write('\n')
+    json.dumps({'4': 5, '6': 7}, sort_keys=True,indent=4, separators=(',', ': '))
+    json.dump('{'+args.username+':{', jsonfile)
+    #for row in reader:
+    
+    json.dump(user_friends, jsonfile)
+    jsonfile.write('\n')
     

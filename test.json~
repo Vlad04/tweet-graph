@@ -1,36 +1,24 @@
-{
-  "name": "firebase-import",
-  "description": "npm config for Firebase Import",
-  "version": "2.0.0",
-  "dependencies": {
-    "JSONStream": "^1.2.1",
-    "firebase": "^3.4.0",
-    "optimist": "^0.6.1",
-    "progress": "^1.1.8"
-  },
-  "devDependencies": {
-    "copyfiles": "^1.0.0"
-  },
-  "repository": {
-    "type": "git",
-    "url": "git://github.com/firebase/firebase-import.git"
-  },
-  "keywords": [
-    "firebase",
-    "import"
-  ],
-  "files": [
-    "bin/**",
-    "LICENSE",
-    "README.md",
-    "package.json"
-  ],
-  "author": "Firebase",
-  "license": "MIT",
-  "bin": {
-    "firebase-import": "./bin/firebase-import.js"
-  },
-  "scripts": {
-    "build": "copyfiles -f src/firebase-import.js bin"
-  }
+
+{"20_Vlad":{
+"Kimbuca":"_AlexHirsch",
+"Kimbuca":"Jime_lovedance",
+"Kimbuca":"BillGates",
+"Kimbuca":"Conacyt_MX",
+"Kimbuca":"cultura_mx",
+"Kimbuca":"NatGeo",
+"Kimbuca":"EmmaWatson",
+"Kimbuca":"arytosh",
+"Kimbuca":"Tweet_Download",
+"Kimbuca":"TeamQuetzal",
+"Kimbuca":"geravelasco",
+"Kimbuca":"YouTube",
+"Kimbuca":"MintzyHerrera",
+"Kimbuca":"Dropbox",
+"Kimbuca":"br_lpz",
+"Kimbuca":"LindseyStirling",
+"Kimbuca":"J_ChavaM",
+"Kimbuca":"DanielaOdette",
+"Kimbuca":"valecortazar"
 }
+}
+
