@@ -48,10 +48,10 @@ if __name__ == "__main__":
 
 
     reader = csv.DictReader( filename)
-    print(json.dumps({args.username: user_friends, '6': 7}, sort_keys=True,indent=4, separators=(',', ': ')))
-    json.dump('{'+args.username+':{', jsonfile)
+    print(json.dumps({args.username: user_friends}, sort_keys=True,indent=4, separators=(',', ': ')))
+    #json.dump('{'+args.username+':{', jsonfile)
     #for row in reader:
     
-    json.dump(user_friends, jsonfile)
+    #json.dump(user_friends, jsonfile)
     jsonfile.write('\n')
     
