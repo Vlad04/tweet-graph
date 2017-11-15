@@ -45,7 +45,7 @@ if __name__ == "__main__":
     os.system("python graph_generator.py")
     #call(["csvtojson filename > converted.json"])
 
-    jsonfile = open('database.json', 'w')
+    jsonfile = open('database.json', 'a')
     #d = {key: value for (key, value) in user_friends}
 
 
@@ -65,7 +65,7 @@ if __name__ == "__main__":
     #json.dump('{'+args.username+':{', jsonfile)
     #for row in reader:
     
-    json.dump(d,jsonfile)
+    json.dump(d,jsonfile,indent=4, sort_keys=True)
     
 
 
