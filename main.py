@@ -5,6 +5,7 @@ import csv
 import json
 import os
 from subprocess import call
+from itertools import izip
 
 
 
@@ -45,13 +46,22 @@ if __name__ == "__main__":
     #call(["csvtojson filename > converted.json"])
 
     jsonfile = open('database.json', 'a')
+    #d = {key: value for (key, value) in user_friends}
 
 
+    i = iter(user_friends)
+    b = dict(izip(i, i))
+    #print(b)
     reader = csv.DictReader( filename)
-    print(json.dumps({args.username: user_friends}, sort_keys=True,indent=4, separators=(',', ': ')))
+    test=json.dumps({args.username: b}, sort_keys=True,indent=4, separators=(',', ': '))
+    test2=test.replace("\n", "")
+    test3=test2.replace("\"","")
+    print(type(test))
+    print(test)
     #json.dump('{'+args.username+':{', jsonfile)
     #for row in reader:
+    json.dump(test3,jsonfile)
     
-    #json.dump(user_friends, jsonfile)
-    jsonfile.write('\n')
+
+
     
