@@ -1,8 +1,8 @@
 all:
 	gcc main.c -o main
-run:
+upload:
 	sed -i -e 's/}{/,/g' database.json
-	firebase-import --database_url https://basesdedatos-b5c80.firebaseio.com --path / --json test.json
+	firebase-import --database_url https://basesdedatos-b5c80.firebaseio.com --path / --json database.json
 clean:
 	rm -rf main
 	rm -rf *.log
