@@ -6,7 +6,7 @@ import json
 import os
 from subprocess import call
 from itertools import izip
-
+import simplejson as json
 
 
 
@@ -52,15 +52,19 @@ if __name__ == "__main__":
     i = iter(user_friends)
     b = dict(izip(i, i))
     #print(b)
-    reader = csv.DictReader( filename)
+    reader = csv.DictReader(filename)
     test=json.dumps({args.username: b}, sort_keys=True,indent=4, separators=(',', ': '))
     test2=test.replace("\n", "")
-    test3=test2.replace("\"","")
-    print(type(test))
-    print(test)
+    regexp = "\\"
+    test3=test2.replace(regexp,"")
+
+    d = json.loads(test3)
+    print(d)
+    print(type(test3))
+    print(test2)
     #json.dump('{'+args.username+':{', jsonfile)
     #for row in reader:
-    json.dump(test3,jsonfile)
+    json.dump(d,jsonfile)
     
 
 
